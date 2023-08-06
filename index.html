@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>滾輪速度測試</title>
+
+    <!--Three.js CDN-->
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+        "imports": {
+            "three": "https://unpkg.com/three@v0.149.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@v0.149.0/examples/jsm/"
+        }
+    }
+    </script>
+    <!--/Three.js CDN-->
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        #cube2 {
+            width: 50px;
+            height: 50px;
+            background-image: linear-gradient(to right, blue 50%, red 50%);
+            margin: 20px auto;
+            transform-style: preserve-3d;
+            animation: rotateAnimation 10s linear infinite;
+        }
+
+        .container3D,
+        canvas {
+            width: 400px;
+            height: 400px;
+            /*    border: 1px solid black;*/
+            background-color: rgba(235, 235, 235, 1);
+            margin: 0 auto;
+        }
+
+        @keyframes rotateAnimation {
+            0% {
+                transform: rotateX(30deg) rotateY(0deg) rotateZ(0deg);
+            }
+
+            100% {
+                transform: rotateX(30deg) rotateY(360deg) rotateZ(0deg);
+            }
+    </style>
+</head>
+
+<body>
+    <h1>滾輪滾動速度測試</h1>
+    <p>使用滑鼠滾輪來查看滾動速度：</p>
+    <p id="speed">0</p>
+    <p>Highest Speed: <span id="highestSpeed">0</span></p>
+    <button id="resetButton">Reset Highest Speed</button>
+    <br>
+    <br>
+    <div class="container3D"></div>
+    
+    
+    <div id="cube2"></div>
+    
+    <script src="script.js" type="module"></script>
+</body></html>
