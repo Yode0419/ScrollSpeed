@@ -25,47 +25,31 @@
             margin: 20px;
         }
 
-        #cube2 {
-            width: 50px;
-            height: 50px;
-            background-image: linear-gradient(to right, blue 50%, red 50%);
-            margin: 20px auto;
-            transform-style: preserve-3d;
-            animation: rotateAnimation 10s linear infinite;
-        }
-
         .container3D,
         canvas {
-            width: 400px;
-            height: 400px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             /*    border: 1px solid black;*/
             background-color: rgba(235, 235, 235, 1);
             margin: 0 auto;
+            z-index: -1;
+
         }
-
-        @keyframes rotateAnimation {
-            0% {
-                transform: rotateX(30deg) rotateY(0deg) rotateZ(0deg);
-            }
-
-            100% {
-                transform: rotateX(30deg) rotateY(360deg) rotateZ(0deg);
-            }
     </style>
 </head>
 
 <body>
-    <h1>滾輪滾動速度測試</h1>
-    <p>使用滑鼠滾輪來查看滾動速度：</p>
-    <p id="speed">0</p>
-    <p>Highest Speed: <span id="highestSpeed">0</span></p>
-    <button id="resetButton">Reset Highest Speed</button>
-    <br>
-    <br>
     <div class="container3D"></div>
-    
-    
-    <div id="cube2"></div>
-    
+
+    <h1>滾輪/滑動加速測試</h1>
+    <p>使用滑鼠滾輪或觸控滑動來加速</p>
+    <p id="speedText">目前轉速: <span id="speed">0</span> RPM</p>
+    <p id="speedTextExtra"></p>
+    <p>最高轉速: <span id="highestSpeed">0</span> RPM</p>
+    <button id="resetButton">Reset</button>
+
     <script src="script.js" type="module"></script>
 </body></html>
