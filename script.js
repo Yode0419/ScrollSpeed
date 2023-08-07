@@ -48,6 +48,13 @@ function SpeedDown() {
 function handleScroll(event) {
     let delta = 0;
     if (event.type === 'touchmove') {
+        
+        let touches = event.touches || [];
+        // 如果觸控點數量大於3，則忽略多餘的觸控點
+        if (touches.length > 3) {
+            return;
+        }
+
         // 在手機上使用手指觸控滑動，可以使用 event.touches[0] 來獲取觸控信息
         delta = (event.touches[0].clientY - event.touches[0].screenY) * 1.5;
     } else {
@@ -66,14 +73,13 @@ function handleScroll(event) {
 
     // 防止滾動時觸發預設行為，例如頁面滾動
     event.preventDefault();
-    event.stopImmediatePropagation();
 
     // 重置定時器
     cancelAnimationFrame(animationFrameId);
     // 啟動定時器來逐漸減少滾動速度
     animationFrameId = requestAnimationFrame(SpeedDown);
-    
-    
+
+
 }
 
 function resetSpeed() {
@@ -250,9 +256,9 @@ function animate() {
         emu.rotation.z = Math.PI / 2;
         emu.rotation.x += scrollSpeed / 10000;
     }
-    
+
     // 設定正方形轉動效果
-//    cube.rotation.x += scrollSpeed / 10000;
+    //    cube.rotation.x += scrollSpeed / 10000;
 
     renderer.render(scene, camera);
 }
