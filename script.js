@@ -188,7 +188,7 @@ scene.add(plane);
 
 // Load Modal
 let loader = new GLTFLoader();
-loader.load('../public/EmuJr.gltf',
+loader.load('./public/EmuJr.gltf',
     function (gltf) {
         //If the file is loaded, add it to the scene
         emu = gltf.scene;
