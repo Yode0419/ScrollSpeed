@@ -51,16 +51,9 @@ function handleScroll(event) {
     let delta = 0;
     if (event.type === 'touchmove') {
         // 在手機上使用手指觸控滑動，可以使用 event.touches[0] 來獲取觸控信息
-        console.log(prevY);
-        console.log(currentY);
         currentY=event.touches[0].clientY;
-//        console.log(currentY);
-        delta = (currentY-prevY);
+        delta = (currentY-prevY)*3;
         prevY=currentY;
-        
-//        console.log(delta);
-//        delta = (event.touches[0].clientY - event.touches[0].screenY) * 1.5;
-//        console.log(delta);
     } else {
         // 在電腦上使用滑鼠滾輪滾動操作，可以使用 event.deltaY 獲取滾動方向和滾動速度
         delta = event.deltaY || event.detail || event.wheelDelta;
@@ -264,7 +257,6 @@ function animate() {
 
         // 設定正方形轉動效果
         //    cube.rotation.x += scrollSpeed / 10000;
-
         renderer.render(scene, camera);
     }
 
