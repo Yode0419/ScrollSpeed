@@ -66,11 +66,14 @@ function handleScroll(event) {
 
     // 防止滾動時觸發預設行為，例如頁面滾動
     event.preventDefault();
+    event.stopImmediatePropagation();
 
     // 重置定時器
     cancelAnimationFrame(animationFrameId);
     // 啟動定時器來逐漸減少滾動速度
     animationFrameId = requestAnimationFrame(SpeedDown);
+    
+    
 }
 
 function resetSpeed() {
