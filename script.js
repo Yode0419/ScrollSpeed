@@ -15,20 +15,20 @@ function SpeedDown() {
     if (scrollSpeed >= 0 && scrollSpeed < 1000) {
         speedText.style.color = 'black';
         speedText.style.fontSize = '1rem';
-        speedTextExtra.style.display='none';
+        speedTextExtra.style.display = 'none';
     } else if (scrollSpeed >= 1000 && scrollSpeed < 5000) {
         speedText.style.color = 'blue';
         speedText.style.fontSize = '1.25rem';
-        speedTextExtra.style.display='none';
+        speedTextExtra.style.display = 'none';
     } else if (scrollSpeed >= 5000 && scrollSpeed < 10000) {
         speedText.style.color = 'red';
         speedText.style.fontSize = '1.5rem';
-        speedTextExtra.style.display='none';
+        speedTextExtra.style.display = 'none';
     } else if (scrollSpeed >= 10000) {
         speedText.style.color = 'orange';
         speedText.style.fontSize = '3rem';
         // 顯示額外的文字
-        speedTextExtra.style.display='block';
+        speedTextExtra.style.display = 'block';
         speedTextExtra.style.color = 'orange';
         speedTextExtra.style.fontSize = '3rem';
         speedTextExtra.textContent = '乾 燒起來辣!';
@@ -49,7 +49,7 @@ function handleScroll(event) {
     let delta = 0;
     if (event.type === 'touchmove') {
         // 在手機上使用手指觸控滑動，可以使用 event.touches[0] 來獲取觸控信息
-        delta = event.touches[0].clientY - event.touches[0].screenY;
+        delta = (event.touches[0].clientY - event.touches[0].screenY) * 1.5;
     } else {
         // 在電腦上使用滑鼠滾輪滾動操作，可以使用 event.deltaY 獲取滾動方向和滾動速度
         delta = event.deltaY || event.detail || event.wheelDelta;
@@ -111,12 +111,17 @@ resetButton.addEventListener('click', resetSpeed);
 
 
 
+
+
+
 //THREE.js
 import * as THREE from 'three';
 import {
     OrbitControls
 } from 'three/addons/controls/OrbitControls.js';
-
+import {
+    GLTFLoader
+} from 'three/addons/loaders/GLTFLoader.js';
 
 let container = document.querySelector('.container3D');
 let emu, mixer, emuRun, clock = new THREE.Clock();
@@ -133,7 +138,7 @@ const camera = new THREE.PerspectiveCamera(
 
 // 設定相機的位置
 camera.position.set(0, 5, 5);
-camera.lookAt(0, 0, 0);
+camera.lookAt(0, 2, 0);
 
 // 選定渲染器
 const renderer = new THREE.WebGLRenderer({
@@ -167,17 +172,53 @@ plane.receiveShadow = true;
 plane.position.set(0, 0, 0);
 scene.add(plane);
 
-// 產生一個藍色正方形物體
-const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-const cubeMaterial = new THREE.MeshLambertMaterial({
-    color: '#429ef5'
-});
+//// 產生一個藍色正方形物體
+//const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+//const cubeMaterial = new THREE.MeshLambertMaterial({
+//    color: '#429ef5'
+//});
+//
+//const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+//
+//// 設定正方形物體的位置
+//cube.position.set(0, 0.5, 0);
+//scene.add(cube);
 
-const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
-// 設定正方形物體的位置
-cube.position.set(0, 0.5, 0);
-scene.add(cube);
+
+// Load Modal
+let loader = new GLTFLoader();
+loader.load('../public/EmuJr.gltf',
+    function (gltf) {
+        //If the file is loaded, add it to the scene
+        emu = gltf.scene;
+        emu.traverse(function (node) {
+            if (node.isMesh) {
+                node.castShadow = true;
+            }
+        })
+
+        scene.add(emu);
+
+
+        let fileAnimations = gltf.animations;
+        mixer = new THREE.AnimationMixer(emu);
+        let animationName = THREE.AnimationClip.findByName(fileAnimations, 'ArmatureAction')
+        emuRun = mixer.clipAction(animationName);
+        emuRun.play();
+
+    },
+    function (xhr) {
+        //While it is loading, log the progress
+        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+    },
+    function (error) {
+        //If there is an error, log it
+        console.error(error);
+    }
+);
+
+
 
 
 
@@ -195,12 +236,20 @@ function animate() {
     // 循環觸發渲染以產生動畫
     requestAnimationFrame(animate);
 
+    // 設定EMU跑步動畫
     if (mixer) {
         mixer.update(clock.getDelta());
     }
+
+    // 設定EMU轉動效果
+    if (emu) {
+        emu.position.set(2, 2, 1);
+        emu.rotation.z = Math.PI / 2;
+        emu.rotation.x += scrollSpeed / 10000;
+    }
+    
     // 設定正方形轉動效果
-    //
-    cube.rotation.x += scrollSpeed / 10000;
+//    cube.rotation.x += scrollSpeed / 10000;
 
     renderer.render(scene, camera);
 }
