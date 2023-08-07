@@ -48,13 +48,6 @@ function SpeedDown() {
 function handleScroll(event) {
     let delta = 0;
     if (event.type === 'touchmove') {
-        
-        let touches = event.touches || [];
-        // 如果觸控點數量大於3，則忽略多餘的觸控點
-        if (touches.length > 3) {
-            return;
-        }
-
         // 在手機上使用手指觸控滑動，可以使用 event.touches[0] 來獲取觸控信息
         delta = (event.touches[0].clientY - event.touches[0].screenY) * 1.5;
     } else {
@@ -254,24 +247,24 @@ function animate() {
     if (emu) {
         emu.position.set(2, 2, 1);
         emu.rotation.z = Math.PI / 2;
-        emu.rotation.x += scrollSpeed / 10000;
+        emu.rotation.x = (emu.rotation.x += scrollSpeed / 10000) % (Math.PI * 2);
+        }
+
+        // 設定正方形轉動效果
+        //    cube.rotation.x += scrollSpeed / 10000;
+
+        renderer.render(scene, camera);
     }
 
-    // 設定正方形轉動效果
-    //    cube.rotation.x += scrollSpeed / 10000;
+    // 開始執行動畫
+    animate();
 
-    renderer.render(scene, camera);
-}
+    // 配合視窗大小自動更新
+    function onWindowResize() {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
 
-// 開始執行動畫
-animate();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    }
 
-// 配合視窗大小自動更新
-function onWindowResize() {
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize(container.clientWidth, container.clientHeight);
-}
-
-window.addEventListener('resize', onWindowResize);
+    window.addEventListener('resize', onWindowResize);
